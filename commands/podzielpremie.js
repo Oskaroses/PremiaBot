@@ -20,9 +20,9 @@ module.exports = {
 
     await interaction.reply(
       `💼 Podział premii z ${kwota.toFixed(2)}:\n` +
-      `👑 Prezes: $${prezes.toFixed(2)} (25%)\n` +
-      `🧑‍💼 Menedżer: $${menedzer.toFixed(2)} (15%)\n` +
-      `🏦 Zostaje w firmie: $${pozostale.toFixed(2)} (60%)`
+      `👑 Prezes: $${prezes.toFixed(2)}\n` +
+      `🧑‍💼 Menedżer: $${menedzer.toFixed(2)}\n` +
+      `🏦 Zostaje w firmie: $${pozostale.toFixed(2)}`
     );
   }
 };
