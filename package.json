@@ -1,0 +1,16 @@
+{
+  "name": "premiabot",
+  "version": "1.0.0",
+  "description": "Bot Discorda do obliczania premii",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Twoje Imię",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.6.7"
+  }
+}
