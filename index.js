@@ -1,7 +1,8 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { Client, Collection, GatewayIntentBits, Events } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, Events, REST, Routes } = require('discord.js');
+const { clientId, guildId } = require('./config.json');
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds]
@@ -19,7 +20,6 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
-// Obsługa uruchamiania komend
 client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
@@ -34,8 +34,23 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
-client.once(Events.ClientReady, () => {
+client.once(Events.ClientReady, async () => {
   console.log(`✅ Bot zalogowany jako ${client.user.tag}`);
+
+  // Automatyczna rejestracja komend slash
+  try {
+    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+    const commands = client.commands.map(cmd => cmd.data.toJSON());
+
+    await rest.put(
+      Routes.applicationGuildCommands(clientId, guildId),
+      { body: commands }
+    );
+
+    console.log('✅ Komendy slash zarejestrowane automatycznie.');
+  } catch (error) {
+    console.error('❌ Błąd rejestracji komend:', error);
+  }
 });
 
 client.login(process.env.DISCORD_TOKEN);
