@@ -2,7 +2,6 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const { Client, Collection, GatewayIntentBits, Events, REST, Routes } = require('discord.js');
-const { clientId, guildId } = require('./config.json');
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds]
@@ -43,7 +42,7 @@ client.once(Events.ClientReady, async () => {
     const commands = client.commands.map(cmd => cmd.data.toJSON());
 
     await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
       { body: commands }
     );
 
