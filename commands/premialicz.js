@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -56,8 +57,11 @@ module.exports = {
       stats[driver] = (stats[driver] || 0) + 1;
     }
 
+    const premiaData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/premia.json')));
+    const stawka = premiaData.kwota;
+
     const sorted = Object.entries(stats)
-      .map(([driver, count]) => ({ driver, count, total: count * 250 }))
+      .map(([driver, count]) => ({ driver, count, total: count * stawka }))
       .sort((a, b) => b.total - a.total);
 
     const top3 = sorted.slice(0, 3).map((entry, index) =>
@@ -75,7 +79,6 @@ module.exports = {
       `📊 **Premie wszystkich kierowców:**\n\n${fullList}\n\n` +
       `💰 **Łączna kwota premii:** $${totalAmount.toFixed(2)}`;
 
-    // Tworzenie pliku tekstowego z logami
     const logText = matchLog.length
       ? matchLog.join('\n')
       : 'Brak dopasowanych przejazdów.';
@@ -92,7 +95,6 @@ module.exports = {
       files: [fileAttachment]
     });
 
-    // Czyszczenie pliku z dysku
     setTimeout(() => fs.unlink(filePath, () => {}), 10_000);
   }
 };
